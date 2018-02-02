@@ -106,7 +106,7 @@ class NodeMixin(object):
         }
 
         for node in self.full_nodes:
-            url = self.ORGANIZATION_URL(node, self.FULL_NODE_PORT)
+            url = self.ORGANIZATION_URL.format(node, self.FULL_NODE_PORT)
             try:
                 response = requests.post(url, json=data)
             except requests.exceptions.RequestException as re:
@@ -115,7 +115,7 @@ class NodeMixin(object):
         for node in bad_nodes:
             self.remove_node(node)
         bad_nodes.clear()
-        return       
+        return
 
 if __name__ == '__main__':
     pass

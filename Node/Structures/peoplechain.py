@@ -38,7 +38,7 @@ class Peoplechain(object):
             return
 
     def add_organization(self, organization):
-        self.organization.append(organization)
+        self.organizations.append(organization)
 
     def record_signed(self, record):
         for unconfirmed_record in self.unconfirmed_records:
