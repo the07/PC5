@@ -58,7 +58,7 @@ class Record(object):
         data = {
             "endorsee": self._endorsee,
             "endorser": self._endorser,
-            "company", self._company,
+            "company": self._company,
             "role":self.role,
             "detail": self._detail,
             "type": self._type,

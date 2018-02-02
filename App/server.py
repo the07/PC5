@@ -196,6 +196,35 @@ class Server(NodeMixin):
         soup.find(id='summary').string = user.summary
         soup.find(id='location').string = user.location
 
+        work_tag = soup.find(id="working")
+        education_tag = soup.find(id="study")
+        other_tag = soup.find(id="other")
+
+        for record in user.records:
+            new_div_tag = soup.new_tag("div")
+            new_div_tag["class"] = "callout"
+            role_tag = soup.new_tag("h5")
+            role_tag.string = record.role
+            new_div_tag.append(role_tag)
+            company_tag = soup.new_tag("h5")
+            company_tag.string = record.company
+            new_div_tag.append(company_tag)
+            new_detail_tag = soup.new_tag("p")
+            new_detail_tag.string = record.detail
+            new_div_tag.append(new_detail_tag)
+            new_status_tag = soup.new_tag("p")
+            if record.signature is None:
+                new_status_tag.string = 'Pending'
+            else:
+                new_status_tag.string = record.signature
+            new_div_tag.append(new_status_tag)
+            if record.type == 1:
+                work_tag.append(new_div_tag)
+            if record.type == 2:
+                education_tag.append(new_div_tag)
+            if record.type == 3:
+                other_tag.append(new_div_tag)
+
         return str(soup)
 
     @app.route('/record', methods=['POST'])

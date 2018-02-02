@@ -4,9 +4,10 @@ import json
 
 class Record(object):
 
-    def __init__(self, endorsee, endorser, role, detail, rtype, signature=None):
+    def __init__(self, endorsee, endorser, company, role, detail, rtype, signature=None):
         self._endorsee = endorsee
         self._endorser = endorser
+        self._company = company
         self._role = role
         self._detail = detail
         self._type = rtype
@@ -40,12 +41,16 @@ class Record(object):
         return self._signature
 
     @property
+    def company(self):
+        return self._company
+
+    @property
     def hash(self):
         return self._hash
 
     @classmethod
     def from_json(cls, record_json):
-        record = cls(record_json['endorsee'], record_json['endorser'], record_json['role'], record_json['detail'], record_json['type'], record_json.get('signature', None))
+        record = cls(record_json['endorsee'], record_json['endorser'], record_json['company'], record_json['role'], record_json['detail'], record_json['type'], record_json.get('signature', None))
         return record
 
     def _calculate_hash(self):
@@ -53,6 +58,7 @@ class Record(object):
         data = {
             "endorsee": self._endorsee,
             "endorser": self._endorser,
+            "company": self._company,
             "role":self.role,
             "detail": self._detail,
             "type": self._type,
@@ -73,6 +79,7 @@ class Record(object):
         return ":".join((
             self._endorsee,
             self._endorser,
+            self._company,
             self._role,
             self._detail,
             self._type
