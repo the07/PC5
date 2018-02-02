@@ -98,5 +98,24 @@ class NodeMixin(object):
         bad_nodes.clear()
         return
 
+    def broadcast_organization(self, organization):
+        self.request_nodes_from_all()
+        bad_nodes = set()
+        data = {
+            "organization": organization.to_json()
+        }
+
+        for node in self.full_nodes:
+            url = self.ORGANIZATION_URL(node, self.FULL_NODE_PORT)
+            try:
+                response = requests.post(url, json=data)
+            except requests.exceptions.RequestException as re:
+                bad_nodes.add(node)
+
+        for node in bad_nodes:
+            self.remove_node(node)
+        bad_nodes.clear()
+        return        
+
 if __name__ == '__main__':
     pass

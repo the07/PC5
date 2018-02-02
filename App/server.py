@@ -70,11 +70,26 @@ class Server(NodeMixin):
             organizations = []
             try:
                 response = requests.get(url)
-                response_content = response.json().decode('utf-8')
-                for organization in response_content['organizations']:
-                    organization = Organization.from_json(json.loads(organization))
-                    organizations.append(organization)
-                return organizations
+                if len(response.content.decode('utf-8')) == 0:
+                    return None
+                else:
+                    response_content = response.content.decode('utf-8')
+                    for organization in response_content['organizations']:
+                        organization = Organization.from_json(json.loads(organization))
+                        organizations.append(organization)
+                    return organizations
+            except requests.exceptions.RequestException as re:
+                pass
+
+    def get_latest_organization_index(self):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.LATEST_ORGANIZATION_INDEX_URL.format(node, self.FULL_NODE_PORT)
+            try:
+                response = requests.get(url)
+                response_content = response.content.decode('utf-8')
+                print (response_content)
+                return
             except requests.exceptions.RequestException as re:
                 pass
 
@@ -244,11 +259,12 @@ class Server(NodeMixin):
         #users = self.get_all_users()
 
         dataset_tag = soup.find(id="organization-user")
-        for organization in organizations:
-            new_option_tag = soup.new_tag("option")
-            new_option_tag["value"] = organization.index
-            new_option_tag.string = organization.name
-            dataset_tag.append(new_option_tag)
+        if organizations is not None:
+            for organization in organizations:
+                new_option_tag = soup.new_tag("option")
+                new_option_tag["value"] = organization.index
+                new_option_tag.string = organization.name
+                dataset_tag.append(new_option_tag)
 
         return str(soup)
 
@@ -263,7 +279,29 @@ class Server(NodeMixin):
 
     @app.route('/organization', methods=['POST'])
     def create_organization(self, request):
-        pass
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+            else:
+                response = "What you are looking for is on Mars, and you are on Venus"
+                return json.dumps(message)
+        content = request.args
+        location = content[b'location'][0].decode('utf-8')
+        admin = content[b'admin'][0].decode('utf-8')
+        otype = content[b'type'][0].decode('utf-8')
+        name = content[b'oname'][0].decode('utf-8')
+        website = content[b'website'][0].decode('utf-8')
+
+        index = self.get_latest_organization_index()
+        if int(admin) == 0:
+            organization = Organization(index, name, website, location, otype)
+            self.broadcast_organization(organization)
+            request.redirect('/organization')
+        else:
+            organization = Organization(index, name, website, location, otype, user.address)
+            self.broadcast_organization(organization)
+            request.redirect('/organization')
 
     @app.route('/record', methods=['GET'])
     def get_records(self, request):

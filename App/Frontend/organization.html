@@ -60,7 +60,7 @@
     <div class="cell large-7 small-12 medium-7">
       <h4>Create new Organization</h4>
       <form id="record-form" class="log-in-form large-5 medium-5 small-10" action="/organization" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
-        <select>
+        <select name="type">
           <option selected disabled>
             Organization Type
           </option>
@@ -74,7 +74,7 @@
             Other
           </option>
         </select>
-        <input type="text" placeholder="Name" list="organization-user" >
+        <input type="text" placeholder="Name" list="organization-user" name="oname" />
         <datalist id="organization-user">
           <!--[if lte IE 9]><select data-datalist="organization-user"><![endif]-->
           <!-- Populate this list dynamically -->
@@ -88,8 +88,8 @@
           </optgroup>
           <!--[if lte IE 9]></select><![endif]-->
         </datalist>
-        <input type="url" placeholder="Website" />
-        <input type="text" placeholder="Location" />
+        <input type="url" placeholder="Website" name="website"/>
+        <input type="text" placeholder="Location" name="location"/>
         <p>
           Do you represent the owner of the organization? <input type="radio" name="admin" value="0" checked />No
            <input type="radio" name="admin" value="1" />Yes

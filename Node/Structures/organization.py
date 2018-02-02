@@ -11,9 +11,9 @@ class Organization(object):
         self._location = location
         self._type = otype
         if admin is None:
-            self._admin = []
+            self.admin = []
         else:
-            self._admin = admin.append(admin)
+            self.admin.append(admin)
 
     @property
     def index(self):
@@ -41,7 +41,7 @@ class Organization(object):
 
     @classmethod
     def from_json(cls, org_json):
-        organization = cls(org_json['index'], org_json['name'], org_json['website'], org_json['location'], org_json['type'], org_json['admin'])
+        organization = cls(org_json['index'], org_json['name'], org_json['website'], org_json['location'], org_json['type'], org_json.get('admin', None))
         return organization
 
     def add_admin(self, address):
