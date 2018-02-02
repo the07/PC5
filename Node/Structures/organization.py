@@ -37,7 +37,7 @@ class Organization(object):
 
     @property
     def admin(self):
-        return self._admin
+        return self.admin
 
     @classmethod
     def from_json(cls, org_json):
@@ -45,13 +45,13 @@ class Organization(object):
         return organization
 
     def add_admin(self, address):
-        self._admin.append(address)
+        self.admin.append(address)
         return
 
     def remove_admin(self, address):
-        for admin in self._admin:
+        for admin in self.admin:
             if admin == address:
-                self._admin.remove(address)
+                self.admin.remove(address)
                 return True
         return False
 
