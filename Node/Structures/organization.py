@@ -3,12 +3,13 @@ import json
 class Organization(object):
 
     admin = []
-    def __init__(self, index, name, website, location, admin=None):
+    def __init__(self, index, name, website, location, otype, admin=None):
 
         self._index = index
         self._name = name
         self._website = website
         self._location = location
+        self._type = otype
         if admin is None:
             self._admin = []
         else:
@@ -31,12 +32,16 @@ class Organization(object):
         return self._location
 
     @property
+    def type(self):
+        return self._type
+
+    @property
     def admin(self):
         return self._admin
 
     @classmethod
     def from_json(cls, org_json):
-        organization = cls(org_json['index'], org_json['name'], org_json['website'], org_json['location'], org_json['admin'])
+        organization = cls(org_json['index'], org_json['name'], org_json['website'], org_json['location'], org_json['type'], org_json['admin'])
         return organization
 
     def add_admin(self, address):
@@ -60,4 +65,4 @@ class Organization(object):
         return str(self.__dict__)
 
 if __name__ == '__main__':
-    pass        
+    pass
