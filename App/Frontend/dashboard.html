@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Peoplechain - Blockchain Network</title>
+  <meta name="description" content="Blockchain network for Professionals and Organizations">
+  <meta name="author" content="Gaurav Singh" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+  <!-- Compressed CSS -->
+  <link rel="stylesheet" href="css/foundation.min.css" />
+  <link rel="stylesheet" media="screen" href="css/style.css" />
+  <link rel="stylesheet" href="css/datalist.css" />
+</head>
+<body>
+<!-- BODY -->
+<!-- particles.js container -->
+<div class="grid-container fluid">
+  <div class="title-bar" data-responsive-toggle="responsive-menu" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle="responsive-menu"></button>
+    <div class="title-bar-title libre-font">PeopleChain</div>
+  </div>
+
+  <div class="top-bar" id="responsive-menu">
+    <div class="top-bar-left">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li class="menu-text libre-font">PeopleChain</li>
+        <li class="has-submenu">
+          <a href="dashboard.html">Profile</a>
+          <ul class="submenu menu vertical" data-submenu>
+            <!-- <li><a href="#0">Settings</a></li> -->
+            <li><a href="organization.html">Organization</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>
+        <li><a href="requests.html">Requests</a></li>
+        <li><a href="wallet.html">Wallet</a></li>
+      </ul>
+    </div>
+    <div class="top-bar-right">
+      <ul class="menu">
+        <li><input type="search" placeholder="User or Organization" list="organization-user"></li>
+        <li><button type="button" class="button">Search</button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid-x user-information">
+    <div class="cell large-4 medium-4 small-12">
+      <div class="grid-x">
+        <h3>User Information</h3>
+        <div class="cell large-12 medium-12 small-12 qr-image">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=82374128374981273:489271394871298347" />
+        </div>
+        <div class="cell large-12 medium-12 small-12">
+          <p>
+            Name: <span id="name"></span>
+          </p>
+        </div>
+        <div class="cell large-12 medium-12 small-12">
+          <p>
+            Email: <span id="email"></span>
+          </p>
+        </div>
+        <div class="cell large-12 medium-12 small-12">
+          <p>
+            Headline: <span id="headline"></span>
+          </p>
+        </div>
+        <div class="cell large-12 medium-12 small-12">
+          <p>
+            Summary: <span id="summary"></span>
+          </p>
+        </div>
+        <div class="cell large-12 medium-12 small-12">
+          <p>
+            Location: <span id="location"></span>
+          </p>
+        </div>
+        <div class="cell large-12 medium-12 small-12">
+          <button class="button" data-open="exampleModal1">Add Record</button>
+          <div class="reveal" id="exampleModal1" data-closable data-reveal>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close="exampleModal1">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <form id="record-form" class="log-in-form large-6 medium-6 small-10" action="/record" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
+              <select>
+                <option selected disabled>
+                  Record Type
+                </option>
+                <option value="1">
+                  Work Experiece
+                </option>
+                <option value="2">
+                  Education
+                </option>
+                <option value="3">
+                  Project/Volunteer
+                </option>
+              </select>
+              <input type="text" placeholder="Role/Course" />
+              <label>Organization not in list? <a href="organization.html">Click here</a></label>
+              <input type="text" placeholder="Company/Institute Name" list="organization-user" >
+              <datalist id="organization-user">
+                <!--[if lte IE 9]><select data-datalist="organization-user"><![endif]-->
+                <!-- Populate this list dynamically -->
+                <optgroup label="Swedish Cars">
+                  <option value="volvo">Volvo</option>
+                  <option value="saab">Saab</option>
+                </optgroup>
+                <optgroup label="German Cars">
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </optgroup>
+                <!--[if lte IE 9]></select><![endif]-->
+              </datalist>
+              <input type="text" placeholder="Location" />
+              <textarea name="detail" placeholder="Detail" rows="5" form="record-form"></textarea>
+              <p><input type="submit" class="button expanded" value="Submit"></input></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cell large-offset-1 medium-offset-1 large-7 medium-7 small-12">
+      <div class="grid-x" id="workex">
+        <h4 class="large-12 medium-12 small-12">Work Experience</h4>
+        <div class="cell large-8 medium-8 small-12">
+          <div class="callout">
+            <h5>Role</h5>
+            <h5>Company Name</h5>
+            <p>
+              Detail
+            </p>
+            <p>
+              Status
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="grid-x" id="eduex">
+        <h4 class="large-12 medium-12 small-12">Education</h4>
+        <div class="cell large-8 medium-8 small-12">
+          <div class="callout">
+            <h5>Course Name</h5>
+            <h5>Institute Name</h5>
+            <p>
+              Detail
+            </p>
+            <p>
+              Status
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="grid-x" id="project">
+        <h4 class="large-12 medium-12 small-12">Project/Volunteer</h4>
+        <div class="cell large-8 medium-8 small-12">
+          <div class="callout">
+            <h5>Role</h5>
+            <h5>Company Name</h5>
+            <p>
+              Detail
+            </p>
+            <p>
+              Status
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- scripts -->
+<!-- Compressed JavaScript -->
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="js/foundation.min.js"></script>
+<script src="js/datalist.min.js"></script>
+<script>
+(function() {
+    var inputs = document.getElementsByTagName('input');
+    for( var i = 0; i < inputs.length; i++ ) {
+        var input = inputs[i];
+        input.onchange = function(evt) {
+            var elem = evt ? evt.target : window.event.srcElement;
+        };
+    }
+}());
+</script>
+<script src="js/script.js"></script>
+</body>
+</html>

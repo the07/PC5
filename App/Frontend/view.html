@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Peoplechain - Blockchain Network</title>
+  <meta name="description" content="Blockchain network for Professionals and Organizations">
+  <meta name="author" content="Gaurav Singh" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+  <!-- Compressed CSS -->
+  <link rel="stylesheet" href="css/foundation.min.css" />
+  <link rel="stylesheet" media="screen" href="css/style.css" />
+  <link rel="stylesheet" href="css/datalist.css" />
+</head>
+<body>
+<!-- BODY --><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Peoplechain - Blockchain Network</title>
+  <meta name="description" content="Blockchain network for Professionals and Organizations">
+  <meta name="author" content="Gaurav Singh" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+  <!-- Compressed CSS -->
+  <link rel="stylesheet" href="css/foundation.min.css" />
+  <link rel="stylesheet" media="screen" href="css/style.css" />
+  <link rel="stylesheet" href="css/datalist.css" />
+</head>
+<body>
+<!-- BODY -->
+<!-- particles.js container -->
+<div class="grid-container fluid">
+  <div class="title-bar" data-responsive-toggle="responsive-menu" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle="responsive-menu"></button>
+    <div class="title-bar-title libre-font">PeopleChain</div>
+  </div>
+
+  <div class="top-bar" id="responsive-menu">
+    <div class="top-bar-left">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li class="menu-text libre-font">PeopleChain</li>
+        <li class="has-submenu">
+          <a href="dashboard.html">Profile</a>
+          <ul class="submenu menu vertical" data-submenu>
+            <!-- <li><a href="#0">Settings</a></li> -->
+            <li><a href="organization.html">Organization</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>
+        <li><a href="requests.html">Requests</a></li>
+        <li><a href="wallet.html">Wallet</a></li>
+      </ul>
+    </div>
+    <div class="top-bar-right">
+      <ul class="menu">
+        <li><input type="search" placeholder="User or Organization" list="organization-user"></li>
+        <li><button type="button" class="button">Search</button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid-x user-information">
+    <div class="cell large-12 medium-12 small-12">
+      <div class="grid-x">
+        <h3 class=" cell large-12 small-12 medium-12">User Information</h3>
+        <div class="cell large-5 medium-5 small-12 qr-image">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=82374128374981273:489271394871298347" />
+        </div>
+        <div class="cell large-6 medium-6 small-12 large-offset-1 medium-offset-1">
+          <p>
+            Name: <span id="name"></span>
+          </p>
+          <p>
+            Email: <span id="email"></span>
+          </p>
+          <p>
+            Headline: <span id="headline"></span>
+          </p>
+          <p>
+            Summary: <span id="summary"></span>
+          </p>
+          <p>
+            Location: <span id="location"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- scripts -->
+<!-- Compressed JavaScript -->
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="js/foundation.min.js"></script>
+<script src="js/datalist.min.js"></script>
+<script>
+(function() {
+    var inputs = document.getElementsByTagName('input');
+    for( var i = 0; i < inputs.length; i++ ) {
+        var input = inputs[i];
+        input.onchange = function(evt) {
+            var elem = evt ? evt.target : window.event.srcElement;
+        };
+    }
+}());
+</script>
+<script src="js/script.js"></script>
+</body>
+</html>

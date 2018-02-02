@@ -1,0 +1,112 @@
+
+/* =============================================================================
+   My CSS
+   ========================================================================== */
+
+/* ---- base ---- */
+
+html,body{
+	width:100%;
+	height:100%;
+}
+
+html{
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body{
+  font-family: 'Quicksand', sans-serif;
+	font-size: 13px;
+}
+
+canvas{
+  display:block;
+  vertical-align:bottom;
+}
+
+h1 {
+	font-family: 'Libre Barcode 39 Text', cursive;
+	font-size: 72px;
+}
+
+h2, h3, h4, h4, h6 {
+	font-family: 'Quicksand', sans-serif;
+}
+
+
+/* ---- particles.js container ---- */
+
+#particles-js{
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  background-image: url('');
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+	position: fixed;
+	z-index: 1;
+}
+
+/* ---- home, register ---- */
+
+.logo {
+	position: relative;
+	z-index: 5;
+}
+
+.log-in-form-container {
+	z-index: 5;
+	position: relative;
+	margin-top: 80px;
+}
+
+.log-in-form {
+	margin-top: 50px !important;
+}
+
+.log-in-form * {
+	position: relative;
+	z-index: 5;
+}
+
+.log-in-form input {
+	border-radius: 3px;
+	background-color: transparent;
+	box-shadow: none;
+}
+
+.log-in-form .button {
+	background: #000;
+}
+
+.message {
+	font-size: 18px;
+}
+
+.message span {
+	font-size: 21px;
+	font-weight: bold;
+}
+
+/* ---- dashboard ---- */
+
+.user-information * {
+	margin: 5px;
+}
+
+.razorpay-payment-button {
+	display: inline-block !important;
+	vertical-align: middle !important;
+	font-family: inherit !important;
+	padding: .85em 1em !important;
+	-webkit-appearance: none !important;
+	border: 1px solid transparent !important;
+	transition: background-color .25s ease-out,color .25s ease-out !important;
+	font-size: .9em !important;
+	line-height: 1 !important;
+	text-align: center !important;
+	cursor: pointer !important;
+	background-color: #1779ba !important;
+	color: #fefefe !important;
+}
