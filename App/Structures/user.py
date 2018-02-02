@@ -55,7 +55,7 @@ class User(object):
 
     @classmethod
     def from_json(cls, user_json):
-        user = cls(user_json['address'], user_json['email'], user_json['password'], user_json['name'], user_json['headline'], user_json['summary'], user_json['location'], user_json.get('records', None))
+        user = cls(user_json['index'], user_json['address'], user_json['email'], user_json['password'], user_json['name'], user_json['headline'], user_json['summary'], user_json['location'], user_json.get('records', None))
         return user
 
     def add_record(self, record):
