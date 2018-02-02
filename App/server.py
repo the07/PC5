@@ -50,6 +50,19 @@ class Server(NodeMixin):
             except requests.exceptions.RequestException as re:
                 pass
 
+    def get_user_by_email(self, email):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.USER_EMAIL_URL.format(node, self.FULL_NODE_PORT, email)
+            try:
+                response = requests.get(url)
+                response_content = response.json()
+                if response_content is not '':
+                    user_json = json.loads(response_content['user'])
+                    return User.from_json(user_json)
+            except requests.exceptions.RequestException as re:
+                pass
+
     @app.route('/', methods=['GET'], branch=True)
     def index(self, request):
 
@@ -146,12 +159,44 @@ class Server(NodeMixin):
         password = content[b'password'][0]
         password_hash = sha256(password).hexdigest()
         user = self.get_user_by_email(email)
+        if user.password == password_hash:
+            session_id = request.getSession().uid.decode('utf-8')
+            instance = Instance(session_id, user)
+            self.instances.append(instance)
+            request.redirect('/dashboard')
+        else:
+            html_file = open('Frontend/index.html').read()
+            soup = BeautifulSoup(html_file, 'html.parser')
+
+            soup.find(id='message').string = "Incorrect email or password"
+            return str(soup)
 
     @app.route('/dashboard', methods=['GET'])
     def user_dashboard(self, request):
         #From session get user
         #soup dashboard.html, give values, return soup
-        pass
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+            else:
+                response = "What you are looking for is on Mars, and you are on Venus"
+                return json.dumps(message)
+
+        html_file = open('Frontend/dashboard.html').read()
+        soup = BeautifulSoup(html_file, 'html.parser')
+
+        source="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + user.address
+        new_img_tag = soup.new_tag('img')
+        new_img_tag['src'] = source
+        soup.find(id='qr-image').append(new_img_tag)
+        soup.find(id='uname').string = user.name
+        soup.find(id='email').string = user.email
+        soup.find(id='headline').string = user.headline
+        soup.find(id='summary').string = user.summary
+        soup.find(id='location').string = user.location
+
+        return str(soup)
 
     @app.route('/record', methods=['POST'])
     def create_record(self, request):
