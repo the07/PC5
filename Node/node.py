@@ -162,6 +162,10 @@ class FullNode(NodeMixin):
         else:
             return
 
+    @app.route('/user/index', methods=['GET'])
+    def get_latest_user_index(self, request):
+        return str(self.peoplechain.get_latest_user_index())        
+
     @app.route('/user/index/<index>', methods=['GET'])
     def get_user_by_index(self, request, index):
         user = self.peoplechain.get_user_by_index(index)
@@ -174,10 +178,6 @@ class FullNode(NodeMixin):
         else:
             return
 
-    @app.route('/user/index', methods=['GET'])
-    def get_latest_user_index(self, request):
-        return str(self.peoplechain.get_latest_user_index())
-
     @app.route('/organization/<address>', methods=['GET'])
     def get_organization_by_admin(self, request, address):
         organization = self.peoplechain.get_organization_by_admin(address)
@@ -188,6 +188,10 @@ class FullNode(NodeMixin):
             return json.dumps(data).encode('utf-8')
         else:
             return
+
+    @app.route('/orgainzation/index', methods=['GET'])
+    def get_latest_user_index(self, request):
+        return str(self.peoplechain.get_latest_organization_index())
 
     @app.route('/organization/index/<index>', methods=['GET'])
     def get_organization_by_admin(self, request, index):
@@ -207,10 +211,6 @@ class FullNode(NodeMixin):
         index = body['index']
         self.peoplechain.add_organization_admin(index, admin)
         return
-
-    @app.route('/orgainzation/index', methods=['GET'])
-    def get_latest_user_index(self, request):
-        return str(self.peoplechain.get_latest_organization_index())
 
     @app.route('/nodes', methods=['GET'])
     def get_nodes(self, request):

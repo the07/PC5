@@ -115,7 +115,10 @@ class Peoplechain(object):
         return self.users[-1].index
 
     def get_latest_organization_index(self):
-        return self.organizations[-1].index
+        if len(self.organizations) > 0:
+            return self.organizations[-1].index
+        else:
+            return None
 
 if __name__ == '__main__':
     pass
