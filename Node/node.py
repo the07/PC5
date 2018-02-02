@@ -136,8 +136,8 @@ class FullNode(NodeMixin):
             data = {
                 "organizations": [orgainzation.to_json() for organization in self.peoplechain.organizations]
             }
-            return json.dumps(data)
-        return None    
+            return json.dumps(data).encode('utf-8')
+        return None
 
     @app.route('/user', methods=['POST'])
     def create_user(self, request):

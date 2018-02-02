@@ -63,6 +63,21 @@ class Server(NodeMixin):
             except requests.exceptions.RequestException as re:
                 pass
 
+    def get_all_organization(self):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.ALL_ORGANIZATION_URL.format(node, self.FULL_NODE_PORT)
+            organizations = []
+            try:
+                response = requests.get(url)
+                response_content = response.json().decode('utf-8')
+                for organization in response_content['organizations']:
+                    organization = Organization.from_json(json.loads(organization))
+                    organizations.append(organization)
+                return organizations
+            except requests.exceptions.RequestException as re:
+                pass
+
     @app.route('/', methods=['GET'], branch=True)
     def index(self, request):
 
@@ -226,7 +241,7 @@ class Server(NodeMixin):
                 other_tag.append(new_div_tag)
 
         organizations = self.get_all_organization()
-        users = self.get_all_users()
+        #users = self.get_all_users()
 
         dataset_tag = soup.find(id="organization-user")
         for organization in organizations:
