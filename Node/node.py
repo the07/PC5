@@ -200,9 +200,17 @@ class FullNode(NodeMixin):
         else:
             return
 
+    @app.route('/organization/admin', methods=['POST'])
+    def add_admin(self, request):
+        body = json.loads(request.content.read().decode('utf-8'))
+        admin = body['admin']
+        index = body['index']
+        self.peoplechain.add_organization_admin(index, admin)
+        return
+
     @app.route('/orgainzation/index', methods=['GET'])
     def get_latest_user_index(self, request):
-        return str(self.peoplechain.get_latest_organization_index())        
+        return str(self.peoplechain.get_latest_organization_index())
 
     @app.route('/nodes', methods=['GET'])
     def get_nodes(self, request):
