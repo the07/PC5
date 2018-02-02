@@ -11,6 +11,7 @@ class NodeMixin(object):
     URECORD_URL = "http://{}:{}/record/{}"
     USER_URL = "http://{}:{}/user"
     USER_INDEX_URL = "http://{}:{}/user/index/{}"
+    USER_EMAIL_URL = "http://{}:{}/user/email/{}"
     LATEST_USER_INDEX_URL = "http://{}:{}/user/index"
     BALANCE_URL = "http://{}:{}/balance/{}"
     USER_GET_URL = "http://{}:{}/user/{}"

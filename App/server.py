@@ -141,7 +141,11 @@ class Server(NodeMixin):
         #Check if all values exist, do the same on the client side in a javascript file
         #Check if user exists with that username, if it does, check if the password matches
         #If both the username and password match, create a session, store user information in session, redirect to dashboard
-        request.redirect('/dashboard')
+        content = request.args
+        email = content[b'email'][0].decode('utf-8')
+        password = content[b'password'][0]
+        password_hash = sha256(password).hexdigest()
+        user = self.get_user_by_email(email)
 
     @app.route('/dashboard', methods=['GET'])
     def user_dashboard(self, request):
