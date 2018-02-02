@@ -119,15 +119,6 @@ class FullNode(NodeMixin):
         }
         return json.dumps(data).encode('utf-8')
 
-    @app.route('/organization', methods=['GET'])
-    def get_all_organization_on_node(self, request):
-        if len(self.peoplechain.organizations) > 0:
-            data = {
-                "organizations": [orgainzation.to_json() for organization in self.peoplechain.organizations]
-            }
-            return json.dumps(data)
-        return None      
-
     @app.route('/organization', methods=['POST'])
     def create_organization(self, request):
         org_data = json.loads(request.content.read().decode('utf-8'))
@@ -138,6 +129,15 @@ class FullNode(NodeMixin):
             "message": "Organization Created"
         }
         return json.dumps(response).encode('utf-8')
+
+    @app.route('/organization/all', methods=['GET'])
+    def get_all_organization_on_node(self, request):
+        if len(self.peoplechain.organizations) > 0:
+            data = {
+                "organizations": [orgainzation.to_json() for organization in self.peoplechain.organizations]
+            }
+            return json.dumps(data)
+        return None    
 
     @app.route('/user', methods=['POST'])
     def create_user(self, request):
