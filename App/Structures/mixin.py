@@ -11,12 +11,14 @@ class NodeMixin(object):
     URECORD_URL = "http://{}:{}/record/{}"
     USER_URL = "http://{}:{}/user"
     USER_INDEX_URL = "http://{}:{}/user/index/{}"
+    LATEST_USER_INDEX_URL = "http://{}:{}/user/index"
     BALANCE_URL = "http://{}:{}/balance/{}"
     USER_GET_URL = "http://{}:{}/user/{}"
     GENESIS_URL = "http://{}:{}/genesis"
     ORGANIZATION_URL = "http://{}:{}/organization"
     ORGANIZATION_GET_URL = "http://{}:{}/organization/{}"
     ORGANIZATION_GET_INDEX_URL = "http://{}:{}/organization/index/{}"
+    LATEST_ORGANIZATION_INDEX_URL = "http://{}:{}/organization/index"
 
     def request_nodes(self, node):
         url = self.NODES_URL.format(node, self.FULL_NODE_PORT)
