@@ -211,7 +211,7 @@ class Server(NodeMixin):
                 user = instance.get_user_by_session(session_id)
             else:
                 response = "What you are looking for is on Mars, and you are on Venus"
-                return json.dumps(message)
+                return json.dumps(response)
 
         html_file = open('Frontend/dashboard.html').read()
         soup = BeautifulSoup(html_file, 'html.parser')
@@ -289,7 +289,7 @@ class Server(NodeMixin):
         content = request.args
         location = content[b'location'][0].decode('utf-8')
         admin = content[b'admin'][0].decode('utf-8')
-        otype = content[b'type'][0].decode('utf-8')
+        otype = content[b'otype'][0].decode('utf-8')
         name = content[b'oname'][0].decode('utf-8')
         website = content[b'website'][0].decode('utf-8')
 

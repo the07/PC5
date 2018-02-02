@@ -13,7 +13,7 @@ class Organization(object):
         if admin is None:
             self.admin = []
         else:
-            self.admin.append(admin)
+            self.add_admin(admin)
 
     @property
     def index(self):
