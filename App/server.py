@@ -225,11 +225,22 @@ class Server(NodeMixin):
             if record.type == 3:
                 other_tag.append(new_div_tag)
 
+        organizations = self.get_all_organization()
+        users = self.get_all_users()
+
+        dataset_tag = soup.find(id="organization-user")
+        for organization in organizations:
+            new_option_tag = soup.new_tag("option")
+            new_option_tag["value"] = organization.index
+            new_option_tag.string = organization.name
+            dataset_tag.append(new_option_tag)
+
         return str(soup)
 
     @app.route('/record', methods=['POST'])
     def create_record(self, request):
-        pass
+        content = request.args
+        print (content)
 
     @app.route('/organization', methods=['GET'])
     def get_organization(self, request):
@@ -253,8 +264,9 @@ class Server(NodeMixin):
 
     @app.route('/logout', methods=['GET'])
     def logout(self, request):
-        #Expire session data
+        request.getSession().expire()
         request.redirect('/')
+        return
 
     @app.route('/purchase', methods=['POST'])
     def buy_coins(self, request):

@@ -83,7 +83,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
             <form id="record-form" class="log-in-form large-6 medium-6 small-10" action="/record" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
-              <select>
+              <select name="type">
                 <option selected disabled>
                   Record Type
                 </option>
@@ -97,9 +97,9 @@
                   Project/Volunteer
                 </option>
               </select>
-              <input type="text" placeholder="Role/Course" />
+              <input type="text" placeholder="Role/Course" name="role"/>
               <label>Organization not in list? <a href="organization.html">Click here</a></label>
-              <input type="text" placeholder="Company/Institute Name" list="organization-user" >
+              <input type="text" placeholder="Company/Institute Name" list="organization-user" name="organization-id" >
               <datalist id="organization-user">
                 <!--[if lte IE 9]><select data-datalist="organization-user"><![endif]-->
                 <!-- Populate this list dynamically -->
@@ -113,8 +113,8 @@
                 </optgroup>
                 <!--[if lte IE 9]></select><![endif]-->
               </datalist>
-              <input type="text" placeholder="Location" />
-              <textarea name="detail" placeholder="Detail" rows="5" form="record-form"></textarea>
+              <input type="text" placeholder="Location" name='record-location'/>
+              <textarea name="detail" placeholder="Detail" rows="5" form="record-form" name='record-detail'></textarea>
               <p><input type="submit" class="button expanded" value="Submit"></input></p>
             </form>
           </div>

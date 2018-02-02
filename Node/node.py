@@ -189,6 +189,13 @@ class FullNode(NodeMixin):
         else:
             return
 
+    @app.route('/orgainzation', methods=['GET'])
+    def get_all_organization(self, request):
+        data = {
+            "organizations": [orgainzation.to_json() for organization in self.peoplechain.organizations]
+        }
+        return json.dumps(data)
+
     @app.route('/orgainzation/index', methods=['GET'])
     def get_latest_organization_index(self, request):
         return str(self.peoplechain.get_latest_organization_index())
