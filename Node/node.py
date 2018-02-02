@@ -163,7 +163,7 @@ class FullNode(NodeMixin):
             return
 
     @app.route('/user/<email>', methods=['GET'])
-    def get_user_by_address(self, request, email):
+    def get_user_by_email(self, request, email):
         user = self.peoplechain.get_user_by_email(email)
         if user is not None:
             data = {
