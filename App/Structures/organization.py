@@ -10,9 +10,7 @@ class Organization(object):
         self._website = website
         self._location = location
         self._type = otype
-        if admin is None:
-            self.admin = []
-        else:
+        if admin is not None:
             self.add_admin(admin)
 
     @property
