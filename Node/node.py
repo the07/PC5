@@ -164,7 +164,7 @@ class FullNode(NodeMixin):
 
     @app.route('/user/index', methods=['GET'])
     def get_latest_user_index(self, request):
-        return str(self.peoplechain.get_latest_user_index())        
+        return str(self.peoplechain.get_latest_user_index())
 
     @app.route('/user/index/<index>', methods=['GET'])
     def get_user_by_index(self, request, index):
@@ -178,6 +178,10 @@ class FullNode(NodeMixin):
         else:
             return
 
+    @app.route('/orgainzation/index', methods=['GET'])
+    def get_latest_organization_index(self, request):
+        return str(self.peoplechain.get_latest_organization_index())
+
     @app.route('/organization/<address>', methods=['GET'])
     def get_organization_by_admin(self, request, address):
         organization = self.peoplechain.get_organization_by_admin(address)
@@ -189,12 +193,8 @@ class FullNode(NodeMixin):
         else:
             return
 
-    @app.route('/orgainzation/index', methods=['GET'])
-    def get_latest_user_index(self, request):
-        return str(self.peoplechain.get_latest_organization_index())
-
     @app.route('/organization/index/<index>', methods=['GET'])
-    def get_organization_by_admin(self, request, index):
+    def get_organization_by_index(self, request, index):
         organization = self.peoplechain.get_organization_by_index(index)
         if organization is not None:
             data = {
@@ -204,7 +204,7 @@ class FullNode(NodeMixin):
         else:
             return
 
-    @app.route('/organization/admin', methods=['POST'])
+    @app.route('/organization/admin/add', methods=['POST'])
     def add_admin(self, request):
         body = json.loads(request.content.read().decode('utf-8'))
         admin = body['admin']
