@@ -33,10 +33,22 @@ class Instance:
 class Server(NodeMixin):
 
     app = Klein()
+    CLIENT_PORT = 30906
+    instances = []
 
     def __init__(self):
 
-        self.app.run('0.0.0.0', 9393)
+        self.app.run('0.0.0.0', self.CLIENT_PORT)
+
+    def get_latest_user_index(self):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.LATEST_USER_INDEX_URL.format(node, self.FULL_NODE_PORT)
+            try:
+                response = requests.get(url)
+                return int(response.content)
+            except requests.exceptions.RequestException as re:
+                pass
 
     @app.route('/', methods=['GET'], branch=True)
     def index(self, request):
@@ -60,7 +72,7 @@ class Server(NodeMixin):
         data = {
             'grant_type': 'authorization_code',
             'code': authorization_code,
-            'redirect_uri': 'http://localhost:9393/linkedin',
+            'redirect_uri': 'http://localhost:30906/linkedin',
             'client_id': CLIENT_ID,
             'client_secret': CLIENT_SECRET
         }
@@ -96,15 +108,23 @@ class Server(NodeMixin):
     def user_register(self, request):
 
         #Check if all values exist, do the same on the client side in a javascript file
+        index = self.get_latest_user_index()
         # Generate a key pair
         key = Key()
-        #address = key.public_key
-        #password = sha256(request.args[b'password']).hexdigest()
-        #Create a user from the args and key pair and broadcast to the network
-        #address, email, password, name, headline, summary, location,
-        #user = User(address, request.ar)
-        #Redirect to message page with private key
+        address = key.get_public_key()
+        content = request.args
 
+        #index, address, email, password, name, headline, summary, location,
+        email = content[b'email'][0].decode('utf-8')
+        password = content[b'password'][0]
+        password_hash = sha256(password).hexdigest()
+        name = content[b'name'][0].decode('utf-8')
+        headline = content[b'headline'][0].decode('utf-8')
+        summary = content[b'summary'][0].decode('utf-8')
+        location = content[b'location'][0].decode('utf-8')
+        user = User(index+1, address, email, password_hash, name, headline, summary, location)
+
+        self.broadcast_user(user)
 
         html_file = open('Frontend/message.html').read()
         soup = BeautifulSoup(html_file, 'html.parser')

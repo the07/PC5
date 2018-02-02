@@ -162,6 +162,17 @@ class FullNode(NodeMixin):
         else:
             return
 
+    @app.route('/user/<email>', methods=['GET'])
+    def get_user_by_address(self, request, email):
+        user = self.peoplechain.get_user_by_email(email)
+        if user is not None:
+            data = {
+                "user": user.to_json()
+            }
+            return json.dumps(data).encode('utf-8')
+        else:
+            return
+
     @app.route('/user/index', methods=['GET'])
     def get_latest_user_index(self, request):
         return str(self.peoplechain.get_latest_user_index())

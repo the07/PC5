@@ -66,6 +66,12 @@ class Peoplechain(object):
                 return user
         return None
 
+    def get_user_by_email(self, email):
+        for user in self.users:
+            if user.email == email:
+                return user
+        return None
+
     def add_organization_admin(self, index, address):
         for organization in self.organizations:
             if organization.index == int(index):
