@@ -189,6 +189,7 @@ class Server(NodeMixin):
         password = content[b'password'][0]
         password_hash = sha256(password).hexdigest()
         user = self.get_user_by_email(email)
+        #Handle user does not exist
         if user.password == password_hash:
             session_id = request.getSession().uid.decode('utf-8')
             instance = Instance(session_id, user)
@@ -275,10 +276,23 @@ class Server(NodeMixin):
 
     @app.route('/organization', methods=['GET'])
     def get_organization(self, request):
-        pass
+
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+            else:
+                response = "What you are looking for is on Mars, and you are on Venus"
+                return json.dumps(message)
+
+        html_file = open('Frontend/organization.html').read()
+        soup = BeautifulSoup(html_file, 'html.parser')
+
+        return str(soup)
 
     @app.route('/organization', methods=['POST'])
     def create_organization(self, request):
+        
         session_id = request.getSession().uid.decode('utf-8')
         for instance in self.instances:
             if instance.session_id == session_id:

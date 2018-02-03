@@ -134,7 +134,7 @@ class FullNode(NodeMixin):
     def get_all_organization_on_node(self, request):
         if len(self.peoplechain.organizations) > 0:
             data = {
-                "organizations": [orgainzation.to_json() for organization in self.peoplechain.organizations]
+                "organizations": [organization.to_json() for organization in self.peoplechain.organizations]
             }
             return json.dumps(data).encode('utf-8')
         return None
