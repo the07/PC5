@@ -12,6 +12,8 @@ class Organization(object):
         self._type = otype
         if admin is not None:
             self.add_admin(admin)
+        else:
+            self.admin = []
 
     @property
     def index(self):

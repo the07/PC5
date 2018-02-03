@@ -73,7 +73,7 @@ class Server(NodeMixin):
                 if len(response.content.decode('utf-8')) == 0:
                     return None
                 else:
-                    response_content = response.content.decode('utf-8')
+                    response_content = json.loads(response.content.decode('utf-8'))
                     for organization in response_content['organizations']:
                         organization = Organization.from_json(json.loads(organization))
                         organizations.append(organization)
@@ -210,64 +210,64 @@ class Server(NodeMixin):
         for instance in self.instances:
             if instance.session_id == session_id:
                 user = instance.get_user_by_session(session_id)
+
+                html_file = open('Frontend/dashboard.html').read()
+                soup = BeautifulSoup(html_file, 'html.parser')
+
+                source="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + user.address
+                new_img_tag = soup.new_tag('img')
+                new_img_tag['src'] = source
+                soup.find(id='qr-image').append(new_img_tag)
+                soup.find(id='uname').string = user.name
+                soup.find(id='email').string = user.email
+                soup.find(id='headline').string = user.headline
+                soup.find(id='summary').string = user.summary
+                soup.find(id='location').string = user.location
+
+                work_tag = soup.find(id="working")
+                education_tag = soup.find(id="study")
+                other_tag = soup.find(id="other")
+
+                for record in user.records:
+                    new_div_tag = soup.new_tag("div")
+                    new_div_tag["class"] = "callout"
+                    role_tag = soup.new_tag("h5")
+                    role_tag.string = record.role
+                    new_div_tag.append(role_tag)
+                    company_tag = soup.new_tag("h5")
+                    company_tag.string = record.company
+                    new_div_tag.append(company_tag)
+                    new_detail_tag = soup.new_tag("p")
+                    new_detail_tag.string = record.detail
+                    new_div_tag.append(new_detail_tag)
+                    new_status_tag = soup.new_tag("p")
+                    if record.signature is None:
+                        new_status_tag.string = 'Pending'
+                    else:
+                        new_status_tag.string = record.signature
+                    new_div_tag.append(new_status_tag)
+                    if record.type == 1:
+                        work_tag.append(new_div_tag)
+                    if record.type == 2:
+                        education_tag.append(new_div_tag)
+                    if record.type == 3:
+                        other_tag.append(new_div_tag)
+
+                organizations = self.get_all_organization()
+                #users = self.get_all_users()
+
+                dataset_tag = soup.find(id="organization-user")
+                if organizations is not None:
+                    for organization in organizations:
+                        new_option_tag = soup.new_tag("option")
+                        new_option_tag["value"] = organization.index
+                        new_option_tag.string = organization.name
+                        dataset_tag.append(new_option_tag)
+
+                return str(soup)
             else:
                 response = "What you are looking for is on Mars, and you are on Venus"
                 return json.dumps(response)
-
-        html_file = open('Frontend/dashboard.html').read()
-        soup = BeautifulSoup(html_file, 'html.parser')
-
-        source="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + user.address
-        new_img_tag = soup.new_tag('img')
-        new_img_tag['src'] = source
-        soup.find(id='qr-image').append(new_img_tag)
-        soup.find(id='uname').string = user.name
-        soup.find(id='email').string = user.email
-        soup.find(id='headline').string = user.headline
-        soup.find(id='summary').string = user.summary
-        soup.find(id='location').string = user.location
-
-        work_tag = soup.find(id="working")
-        education_tag = soup.find(id="study")
-        other_tag = soup.find(id="other")
-
-        for record in user.records:
-            new_div_tag = soup.new_tag("div")
-            new_div_tag["class"] = "callout"
-            role_tag = soup.new_tag("h5")
-            role_tag.string = record.role
-            new_div_tag.append(role_tag)
-            company_tag = soup.new_tag("h5")
-            company_tag.string = record.company
-            new_div_tag.append(company_tag)
-            new_detail_tag = soup.new_tag("p")
-            new_detail_tag.string = record.detail
-            new_div_tag.append(new_detail_tag)
-            new_status_tag = soup.new_tag("p")
-            if record.signature is None:
-                new_status_tag.string = 'Pending'
-            else:
-                new_status_tag.string = record.signature
-            new_div_tag.append(new_status_tag)
-            if record.type == 1:
-                work_tag.append(new_div_tag)
-            if record.type == 2:
-                education_tag.append(new_div_tag)
-            if record.type == 3:
-                other_tag.append(new_div_tag)
-
-        organizations = self.get_all_organization()
-        #users = self.get_all_users()
-
-        dataset_tag = soup.find(id="organization-user")
-        if organizations is not None:
-            for organization in organizations:
-                new_option_tag = soup.new_tag("option")
-                new_option_tag["value"] = organization.index
-                new_option_tag.string = organization.name
-                dataset_tag.append(new_option_tag)
-
-        return str(soup)
 
     @app.route('/record', methods=['POST'])
     def create_record(self, request):
@@ -281,41 +281,44 @@ class Server(NodeMixin):
         for instance in self.instances:
             if instance.session_id == session_id:
                 user = instance.get_user_by_session(session_id)
+
+                html_file = open('Frontend/organization.html').read()
+                soup = BeautifulSoup(html_file, 'html.parser')
+
+                return str(soup)
             else:
                 response = "What you are looking for is on Mars, and you are on Venus"
-                return json.dumps(message)
-
-        html_file = open('Frontend/organization.html').read()
-        soup = BeautifulSoup(html_file, 'html.parser')
-
-        return str(soup)
+                return json.dumps(response)
 
     @app.route('/organization', methods=['POST'])
     def create_organization(self, request):
-        
+
         session_id = request.getSession().uid.decode('utf-8')
         for instance in self.instances:
             if instance.session_id == session_id:
                 user = instance.get_user_by_session(session_id)
+
+                content = request.args
+                location = content[b'location'][0].decode('utf-8')
+                admin = content[b'admin'][0].decode('utf-8')
+                otype = content[b'otype'][0].decode('utf-8')
+                name = content[b'oname'][0].decode('utf-8')
+                website = content[b'website'][0].decode('utf-8')
+
+                index = self.get_latest_organization_index()
+                if index is None:
+                    index = '1111111111111111'
+                if int(admin) == 0:
+                    organization = Organization(int(index)+1, name, website, location, otype)
+                    self.broadcast_organization(organization)
+                    request.redirect('/organization')
+                else:
+                    organization = Organization(int(index)+1, name, website, location, otype, user.address)
+                    self.broadcast_organization(organization)
+                    request.redirect('/organization')
             else:
                 response = "What you are looking for is on Mars, and you are on Venus"
-                return json.dumps(message)
-        content = request.args
-        location = content[b'location'][0].decode('utf-8')
-        admin = content[b'admin'][0].decode('utf-8')
-        otype = content[b'otype'][0].decode('utf-8')
-        name = content[b'oname'][0].decode('utf-8')
-        website = content[b'website'][0].decode('utf-8')
-
-        index = self.get_latest_organization_index()
-        if int(admin) == 0:
-            organization = Organization(index, name, website, location, otype)
-            self.broadcast_organization(organization)
-            request.redirect('/organization')
-        else:
-            organization = Organization(index, name, website, location, otype, user.address)
-            self.broadcast_organization(organization)
-            request.redirect('/organization')
+                return json.dumps(response)
 
     @app.route('/record', methods=['GET'])
     def get_records(self, request):
@@ -331,9 +334,16 @@ class Server(NodeMixin):
 
     @app.route('/logout', methods=['GET'])
     def logout(self, request):
-        request.getSession().expire()
-        request.redirect('/')
-        return
+        
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                self.instances.remove(instance)
+                request.getSession().expire()
+                request.redirect('/')
+            else:
+                response = "What you are looking for is on Mars, and you are on Venus"
+                return json.dumps(response)
 
     @app.route('/purchase', methods=['POST'])
     def buy_coins(self, request):
