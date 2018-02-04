@@ -99,7 +99,7 @@ class Server(NodeMixin):
             organizations = []
             try:
                 response = requests.get(url)
-                if int(response.content.decode('utf-8')) == 0:
+                if response.content.decode('utf-8') == '0':
                     return None
                 else:
                     response_content = json.loads(response.content.decode('utf-8'))
