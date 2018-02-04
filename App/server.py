@@ -284,9 +284,11 @@ class Server(NodeMixin):
                         dataset_tag.append(new_option_tag)
 
                 return str(soup)
-            else:
-                response = "What you are looking for is on Mars, and you are on Venus"
-                return json.dumps(response)
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
+
+
 
     @app.route('/record', methods=['POST'])
     def create_record(self, request):
@@ -315,9 +317,11 @@ class Server(NodeMixin):
                         new_div.append(new_a_tag)
                         organization_div.append(new_div)
                 return str(soup)
-            else:
-                response = "What you are looking for is on Mars, and you are on Venus"
-                return json.dumps(response)
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
+
+
 
     @app.route('/organization', methods=['POST'])
     def create_organization(self, request):

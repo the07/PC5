@@ -18,7 +18,7 @@ class NodeMixin(object):
     GENESIS_URL = "http://{}:{}/genesis"
     ORGANIZATION_URL = "http://{}:{}/organization"
     ALL_ORGANIZATION_URL = "http://{}:{}/organization/all"
-    ORGANIZATION_GET_URL = "http://{}:{}/organization/{}"
+    ORGANIZATION_GET_URL = "http://{}:{}/organizations/{}"
     ORGANIZATION_GET_INDEX_URL = "http://{}:{}/organization/index/{}"
     LATEST_ORGANIZATION_INDEX_URL = "http://{}:{}/organization/index"
     ORGANIZATION_ADMIN_URL = "http://{}:{}/organization/admin"

@@ -198,16 +198,18 @@ class FullNode(NodeMixin):
         else:
             return
 
-    @app.route('/organization/<address>', methods=['GET'])
+    @app.route('/organizations/<address>', methods=['GET'])
     def get_organization_by_admin(self, request, address):
         organizations = self.peoplechain.get_organization_by_admin(address)
+        print (len(organizations))
         if len(organizations) > 0:
             data = {
                 "organizations": [organization.to_json() for organization in organizations]
             }
+            print (data)
             return json.dumps(data).encode('utf-8')
         else:
-            return str(0).encode('utf-8')        
+            return str(0).encode('utf-8')
 
     @app.route('/orgainzation/index', methods=['GET'])
     def get_latest_organization_index(self, request):
