@@ -81,8 +81,9 @@ class Peoplechain(object):
     def get_organization_by_admin(self, address):
         organizations = []
         for organization in self.organizations:
-            if address in organization.administrators:
-                organizations.append(orgainzation)
+            for admin in organization.administrators:
+                if admin == address:
+                    organizations.append(organization)
         return organizations
 
     def get_organization_by_index(self, index):
@@ -123,7 +124,7 @@ class Peoplechain(object):
 
     def get_latest_organization_index(self):
         if len(self.organizations) > 0:
-            return self.organizations[-1].index
+            return self.organizations[len(self.organizations)-1].index
         else:
             return None
 
