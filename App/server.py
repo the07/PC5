@@ -56,10 +56,12 @@ class Server(NodeMixin):
             url = self.USER_EMAIL_URL.format(node, self.FULL_NODE_PORT, email)
             try:
                 response = requests.get(url)
-                response_content = response.json()
+                response_content = response.content.decode('utf-8')
                 if response_content is not '':
-                    user_json = json.loads(response_content['user'])
+                    user_json = json.loads(json.loads(response_content)['user'])
                     return User.from_json(user_json)
+                else:
+                    return None
             except requests.exceptions.RequestException as re:
                 pass
 
@@ -207,18 +209,17 @@ class Server(NodeMixin):
         password = content[b'password'][0]
         password_hash = sha256(password).hexdigest()
         user = self.get_user_by_email(email)
-        #Handle user does not exist
-        if user.password == password_hash:
-            session_id = request.getSession().uid.decode('utf-8')
-            instance = Instance(session_id, user)
-            self.instances.append(instance)
-            request.redirect('/dashboard')
-        else:
+        if user is None or user.password != password_hash:
             html_file = open('Frontend/index.html').read()
             soup = BeautifulSoup(html_file, 'html.parser')
 
             soup.find(id='message').string = "Incorrect email or password"
             return str(soup)
+        if user.password == password_hash:
+            session_id = request.getSession().uid.decode('utf-8')
+            instance = Instance(session_id, user)
+            self.instances.append(instance)
+            request.redirect('/dashboard')
 
     @app.route('/dashboard', methods=['GET'])
     def user_dashboard(self, request):
@@ -306,15 +307,17 @@ class Server(NodeMixin):
                 soup = BeautifulSoup(html_file, 'html.parser')
 
                 organizations = self.get_organization_by_admin(user.address)
+                organization_div = soup.find(id="user-organization")
                 if organizations is not None:
-                    organization_div = soup.find(id='user-organization')
                     for organization in organizations:
-                        new_div = soup.new_tag('div')
-                        new_div['class'] = "cell large-6 medium-6 small-12"
-                        new_a_tag = soup.new_tag['a']
-                        new_a_tag['href'] = '/view/organization/' + organization.index
-                        new_div.append(new_a_tag)
-                        organization_div.append(new_div)
+                        new_div_tag = soup.new_tag('div')
+                        div_class = "cell large-12 medium-12 small-12"
+                        new_div_tag["class"] = div_class
+                        new_a_tag = soup.new_tag('a')
+                        new_a_tag["href"] = "/view/organization/" + str(organization.index)
+                        new_a_tag.string = organization.name
+                        new_div_tag.append(new_a_tag)
+                        organization_div.append(new_div_tag)
                 return str(soup)
 
         response = "What you are looking for is on Mars, and you are on Venus"
@@ -345,7 +348,7 @@ class Server(NodeMixin):
                     self.broadcast_organization(organization)
                     request.redirect('/organization')
                 else:
-                    organization = Organization(int(index)+1, name, website, location, otype, user.address)
+                    organization = Organization(int(index)+1, name, website, location, otype, [user.address])
                     self.broadcast_organization(organization)
                     request.redirect('/organization')
 
