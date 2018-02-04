@@ -338,7 +338,7 @@ class Server(NodeMixin):
                 website = content[b'website'][0].decode('utf-8')
 
                 index = self.get_latest_organization_index()
-                if index is None:
+                if index == 'None':
                     index = '1111111111111111'
                 if int(admin) == 0:
                     organization = Organization(int(index)+1, name, website, location, otype)
