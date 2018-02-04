@@ -88,8 +88,7 @@ class Server(NodeMixin):
             try:
                 response = requests.get(url)
                 response_content = response.content.decode('utf-8')
-                print (response_content)
-                return
+                return response_content
             except requests.exceptions.RequestException as re:
                 pass
 
@@ -349,9 +348,9 @@ class Server(NodeMixin):
                     organization = Organization(int(index)+1, name, website, location, otype, user.address)
                     self.broadcast_organization(organization)
                     request.redirect('/organization')
-            else:
-                response = "What you are looking for is on Mars, and you are on Venus"
-                return json.dumps(response)
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
 
     @app.route('/record', methods=['GET'])
     def get_records(self, request):
@@ -374,9 +373,9 @@ class Server(NodeMixin):
                 self.instances.remove(instance)
                 request.getSession().expire()
                 request.redirect('/')
-            else:
-                response = "What you are looking for is on Mars, and you are on Venus"
-                return json.dumps(response)
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
 
     @app.route('/purchase', methods=['POST'])
     def buy_coins(self, request):
