@@ -2,7 +2,6 @@ import json
 
 class Organization(object):
 
-    admin = []
     def __init__(self, index, name, website, location, otype, admin=None):
 
         self._index = index
@@ -10,10 +9,9 @@ class Organization(object):
         self._website = website
         self._location = location
         self._type = otype
+        self._administrators = []
         if admin is not None:
             self.add_admin(admin)
-        else:
-            self.admin = []
 
     @property
     def index(self):
@@ -36,22 +34,22 @@ class Organization(object):
         return self._type
 
     @property
-    def admin(self):
-        return self.admin
+    def administrators(self):
+        return self._administrators
 
     @classmethod
     def from_json(cls, org_json):
-        organization = cls(org_json['index'], org_json['name'], org_json['website'], org_json['location'], org_json['type'], org_json.get('admin', None))
+        organization = cls(org_json['index'], org_json['name'], org_json['website'], org_json['location'], org_json['type'], org_json.get('administrators', None))
         return organization
 
     def add_admin(self, address):
-        self.admin.append(address)
+        self._administrators.append(address)
         return
 
     def remove_admin(self, address):
-        for admin in self.admin:
+        for admin in self._administrators:
             if admin == address:
-                self.admin.remove(address)
+                self._administrators.remove(address)
                 return True
         return False
 
