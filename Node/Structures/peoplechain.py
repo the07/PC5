@@ -80,7 +80,7 @@ class Peoplechain(object):
 
     def get_organization_by_admin(self, address):
         for organization in self.organizations:
-            if address in organization.admin:
+            if address in organization.administrators:
                 return organization
         return None
 
