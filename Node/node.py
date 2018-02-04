@@ -198,10 +198,6 @@ class FullNode(NodeMixin):
         else:
             return
 
-    @app.route('/orgainzation/index', methods=['GET'])
-    def get_latest_organization_index(self, request):
-        return str(self.peoplechain.get_latest_organization_index())
-
     @app.route('/organization/<address>', methods=['GET'])
     def get_organization_by_admin(self, request, address):
         organizations = self.peoplechain.get_organization_by_admin(address)
@@ -211,7 +207,11 @@ class FullNode(NodeMixin):
             }
             return json.dumps(data).encode('utf-8')
         else:
-            return str(0).encode('utf-8')
+            return str(0).encode('utf-8')        
+
+    @app.route('/orgainzation/index', methods=['GET'])
+    def get_latest_organization_index(self, request):
+        return str(self.peoplechain.get_latest_organization_index())
 
     @app.route('/organization/index/<index>', methods=['GET'])
     def get_organization_by_index(self, request, index):

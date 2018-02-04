@@ -124,7 +124,7 @@ class Peoplechain(object):
 
     def get_latest_organization_index(self):
         if len(self.organizations) > 0:
-            return self.organizations[len(self.organizations)-1].index
+            return self.organizations[-1].index
         else:
             return None
 
