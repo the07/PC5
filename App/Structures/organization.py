@@ -57,7 +57,7 @@ class Organization(object):
         return json.dumps(self, default=lambda o: {key.lstrip('_'):value for key, value in o.__dict__.items()}, sort_keys=True)
 
     def __repr__(self):
-        return "<User: Address - {}>".format(self._name)
+        return "<Organization: Address - {}>".format(self._name)
 
     def __str__(self):
         return str(self.__dict__)

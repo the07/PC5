@@ -211,7 +211,7 @@ class FullNode(NodeMixin):
         else:
             return str(0).encode('utf-8')
 
-    @app.route('/orgainzation/index', methods=['GET'])
+    @app.route('/organization/index', methods=['GET'])
     def get_latest_organization_index(self, request):
         return str(self.peoplechain.get_latest_organization_index())
 
