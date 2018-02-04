@@ -93,6 +93,25 @@ class Server(NodeMixin):
             except requests.exceptions.RequestException as re:
                 pass
 
+    def get_organization_by_admin(self, address):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.ORGANIZATION_GET_URL.format(node, self.FULL_NODE_PORT, address)
+            organizations = []
+            try:
+                response = requests.get(url)
+                if int(response.content.decode('utf-8')) == 0:
+                    return None
+                else:
+                    response_content = json.loads(response.content.decode('utf-8'))
+                    for organization in response_content['organizations']:
+                        organization = Organization.from_json(json.loads(organization))
+                        organizations.append(organization)
+                    return organizations
+            except requests.exceptions.RequestException as re:
+                pass
+
+
     @app.route('/', methods=['GET'], branch=True)
     def index(self, request):
 
@@ -285,6 +304,16 @@ class Server(NodeMixin):
                 html_file = open('Frontend/organization.html').read()
                 soup = BeautifulSoup(html_file, 'html.parser')
 
+                organizations = self.get_organization_by_admin(user.address)
+                if organizations is not None:
+                    organization_div = soup.find(id='user-organization')
+                    for organization in organizations:
+                        new_div = soup.new_tag('div')
+                        new_div['class'] = "cell large-6 medium-6 small-12"
+                        new_a_tag = soup.new_tag['a']
+                        new_a_tag['href'] = '/view/organization/' + organization.index
+                        new_div.append(new_a_tag)
+                        organization_div.append(new_div)
                 return str(soup)
             else:
                 response = "What you are looking for is on Mars, and you are on Venus"
@@ -334,7 +363,7 @@ class Server(NodeMixin):
 
     @app.route('/logout', methods=['GET'])
     def logout(self, request):
-        
+
         session_id = request.getSession().uid.decode('utf-8')
         for instance in self.instances:
             if instance.session_id == session_id:
