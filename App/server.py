@@ -293,11 +293,11 @@ class Server(NodeMixin):
                     new_status_tag = soup.new_tag("p")
                     new_status_tag.string = record.signature
                     new_div_tag.append(new_status_tag)
-                    if record.type == "1":
+                    if record.type == 1:
                         work_tag.append(new_div_tag)
-                    if record.type == "2":
+                    if record.type == 2:
                         education_tag.append(new_div_tag)
-                    if record.type == "3":
+                    if record.type == 3:
                         other_tag.append(new_div_tag)
 
                 if unsigned_records is not None:
@@ -317,11 +317,11 @@ class Server(NodeMixin):
                             new_status_tag = soup.new_tag("p")
                             new_status_tag.string = "Pending"
                             new_div_tag.append(new_status_tag)
-                            if record.type == "1":
+                            if record.type == 1:
                                 work_tag.append(new_div_tag)
-                            if record.type == "2":
+                            if record.type == 2:
                                 education_tag.append(new_div_tag)
-                            if record.type == "3":
+                            if record.type == 3:
                                 other_tag.append(new_div_tag)
 
                 dataset_tag = soup.find(id="organization-user")
@@ -360,7 +360,7 @@ class Server(NodeMixin):
                             endorser = organization.administrators[0]
                         else:
                             endorser = self.get_genesis_user_address()
-                        record = Record(user.address, endorser, org, role, detail, rtype)
+                        record = Record(user.address, endorser, org, role, detail, int(rtype))
                         self.broadcast_record(record)
                         request.redirect('/dashboard')
 
@@ -504,7 +504,7 @@ class Server(NodeMixin):
                 detail = content[b'detail'][0].decode('utf-8')
                 org = content[b'company'][0].decode('utf-8')
                 org = int(org)
-                record = Record(endorsee, endorser, org, role, detail, rtype)
+                record = Record(endorsee, endorser, org, role, detail, int(rtype))
                 private_key = content[b'private_key'][0].decode('utf-8')
                 signature = record.sign(private_key)
                 print (signature)
