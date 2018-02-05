@@ -112,6 +112,33 @@ class Server(NodeMixin):
             except requests.exceptions.RequestException as re:
                 pass
 
+    def get_genesis_user_address(self):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.GENESIS_URL.format(node, self.FULL_NODE_PORT)
+            try:
+                response = requests.get(url)
+                return response.content.decode('utf-8')
+            except requests.exceptions.RequestException as re:
+                pass
+
+    def get_all_unconfirmed_records(self, address):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.URECORD_URL.format(node, self.FULL_NODE_PORT, address)
+            urecords = []
+            try:
+                response = requests.get(url)
+                response_content = json.loads(response.content.decode('utf-8'))['records']
+                if len(response_content) == 0:
+                    return None
+                for each in response_content:
+                    record = Record.from_json(json.loads(each))
+                    urecords.append(record)
+                return urecords
+            except requests.exceptions.RequestException as re:
+                pass
+
 
     @app.route('/', methods=['GET'], branch=True)
     def index(self, request):
@@ -246,6 +273,10 @@ class Server(NodeMixin):
                 work_tag = soup.find(id="working")
                 education_tag = soup.find(id="study")
                 other_tag = soup.find(id="other")
+                unsigned_records = self.get_all_unconfirmed_records(user.address)
+
+                organizations = self.get_all_organization()
+                #users = self.get_all_users()
 
                 for record in user.records:
                     new_div_tag = soup.new_tag("div")
@@ -254,26 +285,44 @@ class Server(NodeMixin):
                     role_tag.string = record.role
                     new_div_tag.append(role_tag)
                     company_tag = soup.new_tag("h5")
-                    company_tag.string = record.company
+                    company_tag.string = str(record.company)
                     new_div_tag.append(company_tag)
                     new_detail_tag = soup.new_tag("p")
                     new_detail_tag.string = record.detail
                     new_div_tag.append(new_detail_tag)
                     new_status_tag = soup.new_tag("p")
-                    if record.signature is None:
-                        new_status_tag.string = 'Pending'
-                    else:
-                        new_status_tag.string = record.signature
+                    new_status_tag.string = record.signature
                     new_div_tag.append(new_status_tag)
-                    if record.type == 1:
+                    if record.type == "1":
                         work_tag.append(new_div_tag)
-                    if record.type == 2:
+                    if record.type == "2":
                         education_tag.append(new_div_tag)
-                    if record.type == 3:
+                    if record.type == "3":
                         other_tag.append(new_div_tag)
 
-                organizations = self.get_all_organization()
-                #users = self.get_all_users()
+                if unsigned_records is not None:
+                    for record in unsigned_records:
+                        if record.endorsee == user.address:
+                            new_div_tag = soup.new_tag("div")
+                            new_div_tag["class"] = "callout"
+                            role_tag = soup.new_tag("h5")
+                            role_tag.string = record.role
+                            new_div_tag.append(role_tag)
+                            company_tag = soup.new_tag("h5")
+                            company_tag.string = str(record.company)
+                            new_div_tag.append(company_tag)
+                            new_detail_tag = soup.new_tag("p")
+                            new_detail_tag.string = record.detail
+                            new_div_tag.append(new_detail_tag)
+                            new_status_tag = soup.new_tag("p")
+                            new_status_tag.string = "Pending"
+                            new_div_tag.append(new_status_tag)
+                            if record.type == "1":
+                                work_tag.append(new_div_tag)
+                            if record.type == "2":
+                                education_tag.append(new_div_tag)
+                            if record.type == "3":
+                                other_tag.append(new_div_tag)
 
                 dataset_tag = soup.find(id="organization-user")
                 if organizations is not None:
@@ -292,8 +341,32 @@ class Server(NodeMixin):
 
     @app.route('/record', methods=['POST'])
     def create_record(self, request):
-        content = request.args
-        print (content)
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+
+                content = request.args
+                role = content[b'role'][0].decode('utf-8')
+                rtype = content[b'type'][0].decode('utf-8')
+                detail = content[b'record-detail'][0].decode('utf-8')
+                org = content[b'organization-id'][0].decode('utf-8')
+                org = int(org)
+                # Put this in a separate function - change this to get admin by organization
+                organizations = self.get_all_organization()
+                for organization in organizations:
+                    if organization.index == org:
+                        if len(organization.administrators) > 0:
+                            endorser = organization.administrators[0]
+                        else:
+                            endorser = self.get_genesis_user_address()
+                        record = Record(user.address, endorser, org, role, detail, rtype)
+                        self.broadcast_record(record)
+                        request.redirect('/dashboard')
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
+
 
     @app.route('/organization', methods=['GET'])
     def get_organization(self, request):
@@ -357,11 +430,89 @@ class Server(NodeMixin):
 
     @app.route('/record', methods=['GET'])
     def get_records(self, request):
-        pass
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+
+                html_file = open('Frontend/requests.html').read()
+                soup = BeautifulSoup(html_file, 'html.parser')
+                requests_div = soup.find(id='record-requests')
+                unsigned_records = self.get_all_unconfirmed_records(user.address)
+
+                if unsigned_records is not None:
+                    for record in unsigned_records:
+                        if record.endorser == user.address:
+                            new_div_tag = soup.new_tag("div")
+                            new_div_tag["class"] = "cell large-5 medium-5 small-12 large-offset-1 medium-offset-1"
+                            callout_tag = soup.new_tag("div")
+                            callout_tag["class"] = "callout"
+                            new_form_tag = soup.new_tag('form', action="/sign", method="post", enctype="application/x-www-form-urlencoded")
+                            new_form_tag['accept-charset']='utf-8'
+                            new_input_tag = soup.new_tag("input", type="text")
+                            new_input_tag['readonly'] = None
+                            new_input_tag['name'] = "endorsee"
+                            new_input_tag['value'] = record.endorsee
+                            new_form_tag.append(new_input_tag)
+                            new_input_tag = soup.new_tag("input", type="text")
+                            new_input_tag['readonly'] = None
+                            new_input_tag['name'] = "role"
+                            new_input_tag['value'] = record.role
+                            new_form_tag.append(new_input_tag)
+                            new_input_tag = soup.new_tag("input", type="text")
+                            new_input_tag['readonly'] = None
+                            new_input_tag['name'] = "company"
+                            new_input_tag['value'] = str(record.company)
+                            new_form_tag.append(new_input_tag)
+                            new_input_tag = soup.new_tag("input", type="text")
+                            new_input_tag['readonly'] = None
+                            new_input_tag['name'] = "detail"
+                            new_input_tag['value'] = record.detail
+                            new_form_tag.append(new_input_tag)
+                            new_input_tag = soup.new_tag("input", type="text")
+                            new_input_tag['readonly'] = None
+                            new_input_tag['name'] = "type"
+                            new_input_tag['value'] = str(record.type)
+                            new_form_tag.append(new_input_tag)
+                            new_input_tag = soup.new_tag("input", type="text")
+                            new_input_tag['name'] = "private_key"
+                            new_form_tag.append(new_input_tag)
+                            new_button = soup.new_tag('button')
+                            new_button["class"] = "button"
+                            new_button.string = "Sign"
+                            new_form_tag.append(new_button)
+                            new_div_tag.append(new_form_tag)
+                            requests_div.append(new_div_tag)
+
+                return str(soup)
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
 
     @app.route('/sign', methods=['POST'])
     def sign_record(self, request):
-        pass
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+                endorser = user.address
+
+                content = request.args
+                endorsee = content[b'endorsee'][0].decode('utf-8')
+                role = content[b'role'][0].decode('utf-8')
+                rtype = content[b'type'][0].decode('utf-8')
+                detail = content[b'record-detail'][0].decode('utf-8')
+                org = content[b'organization-id'][0].decode('utf-8')
+                org = int(org)
+                record = Record(endorsee, endorser, org, role, detail, rtype)
+                private_key = content[b'private_key'][0].decode('utf-8')
+                signature = record.sign(private_key)
+                print (signature)
+                self.broadcast_record(record)
+                request.redirect('/record')
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
 
     @app.route('/wallet', methods=['GET'])
     def wallet(self, request):

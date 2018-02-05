@@ -34,7 +34,7 @@
             <li><a href="/logout">Logout</a></li>
           </ul>
         </li>
-        <li><a href="requests.html">Requests</a></li>
+        <li><a href="/record">Requests</a></li>
         <li><a href="wallet.html">Wallet</a></li>
       </ul>
     </div>
@@ -103,17 +103,8 @@
               <datalist id="organization-user">
                 <!--[if lte IE 9]><select data-datalist="organization-user"><![endif]-->
                 <!-- Populate this list dynamically -->
-                <optgroup label="Swedish Cars">
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                </optgroup>
-                <optgroup label="German Cars">
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
-                </optgroup>
                 <!--[if lte IE 9]></select><![endif]-->
               </datalist>
-              <input type="text" placeholder="Location" name='record-location'/>
               <textarea name="detail" placeholder="Detail" rows="5" form="record-form" name='record-detail'></textarea>
               <p><input type="submit" class="button expanded" value="Submit"></input></p>
             </form>
