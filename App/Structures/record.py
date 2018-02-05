@@ -79,7 +79,7 @@ class Record(object):
         return ":".join((
             self._endorsee,
             self._endorser,
-            str(self._company)
+            str(self._company) #TODO: ADD MORE DATA
         )).encode('utf-8')
 
     def verify(self):

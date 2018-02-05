@@ -372,7 +372,7 @@ class Server(NodeMixin):
                 for organization in organizations:
                     if organization.index == org:
                         if len(organization.administrators) > 0:
-                            endorser = organization.administrators[0]
+                            endorser = organization.administrators[1]
                         else:
                             endorser = self.get_genesis_user_address()
                         record = Record(user.address, endorser, org, role, detail, int(rtype))
