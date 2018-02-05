@@ -279,6 +279,7 @@ class Server(NodeMixin):
                 #users = self.get_all_users()
 
                 for record in user.records:
+                    record = Record.from_json(record)
                     new_div_tag = soup.new_tag("div")
                     new_div_tag["class"] = "callout"
                     role_tag = soup.new_tag("h5")
@@ -291,7 +292,7 @@ class Server(NodeMixin):
                     new_detail_tag.string = record.detail
                     new_div_tag.append(new_detail_tag)
                     new_status_tag = soup.new_tag("p")
-                    new_status_tag.string = record.signature
+                    new_status_tag.string = "Signed: " + record.hash
                     new_div_tag.append(new_status_tag)
                     if record.type == 1:
                         work_tag.append(new_div_tag)
