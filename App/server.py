@@ -187,7 +187,7 @@ class Server(NodeMixin):
         data = {
             'grant_type': 'authorization_code',
             'code': authorization_code,
-            'redirect_uri': 'http://localhost:30906/linkedin',
+            'redirect_uri': 'http://13.126.248.230:30906/linkedin',
             'client_id': CLIENT_ID,
             'client_secret': CLIENT_SECRET
         }
