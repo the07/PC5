@@ -82,7 +82,7 @@ class Record(object):
             self._company,
             self._role,
             self._detail,
-            self._type
+            str(self._type)
         )).encode('utf-8')
 
     def verify(self):
