@@ -22,6 +22,7 @@ class NodeMixin(object):
     ORGANIZATION_GET_INDEX_URL = "http://{}:{}/organization/index/{}"
     LATEST_ORGANIZATION_INDEX_URL = "http://{}:{}/organization/index"
     ORGANIZATION_ADMIN_URL = "http://{}:{}/organization/admin"
+    ORGANIZATION_ADMIN_ADD_URL = "http://{}:{}/organization/admin/add"
 
     def request_nodes(self, node):
         url = self.NODES_URL.format(node, self.FULL_NODE_PORT)

@@ -227,9 +227,9 @@ class FullNode(NodeMixin):
     @app.route('/organization/admin/add', methods=['POST'])
     def add_admin(self, request):
         body = json.loads(request.content.read().decode('utf-8'))
-        admin = body['admin']
+        admin = body['email']
         index = body['index']
-        self.peoplechain.add_organization_admin(index, admin)
+        self.peoplechain.add_organization_admin(index, email)
         return
 
     @app.route('/nodes', methods=['GET'])

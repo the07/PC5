@@ -139,6 +139,20 @@ class Server(NodeMixin):
             except requests.exceptions.RequestException as re:
                 pass
 
+    def add_admin_by_email(self, index, email):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.ORGANIZATION_ADMIN_ADD_URL.format(node, self.FULL_NODE_PORT)
+            data = {
+                "index": index,
+                "email": email
+            }
+            try:
+                response = requests.post(url, json=data)
+            except requests.exceptions.RequestException as re:
+                pass
+        return
+
 
     @app.route('/', methods=['GET'], branch=True)
     def index(self, request):
@@ -387,10 +401,23 @@ class Server(NodeMixin):
                         new_div_tag = soup.new_tag('div')
                         div_class = "cell large-12 medium-12 small-12"
                         new_div_tag["class"] = div_class
-                        new_a_tag = soup.new_tag('a')
-                        new_a_tag["href"] = "/view/organization/" + str(organization.index)
-                        new_a_tag.string = organization.name
-                        new_div_tag.append(new_a_tag)
+                        new_p_tag = soup.new_tag('p')
+                        new_p_tag.string = organization.name
+                        new_div_tag.append(new_p_tag)
+                        new_form_tag = soup.new_tag('form', action="/admin/add", method="post", enctype="application/x-www-form-urlencoded")
+                        new_input_tag = soup.new_tag("input", type="text")
+                        new_input_tag['readonly'] = None
+                        new_input_tag['name'] = "organization"
+                        new_input_tag['value'] =  organization.index
+                        new_form_tag.append(new_input_tag)
+                        new_input_tag = soup.new_tag("input", type="text", placeholder="User Email")
+                        new_input_tag['name'] = "user-email"
+                        new_form_tag.append(new_input_tag)
+                        new_button = soup.new_tag('button')
+                        new_button["class"] = "button"
+                        new_button.string = "Add Admin"
+                        new_form_tag.append(new_button)
+                        new_div_tag.append(new_form_tag)
                         organization_div.append(new_div_tag)
                 return str(soup)
 
@@ -518,6 +545,23 @@ class Server(NodeMixin):
     @app.route('/wallet', methods=['GET'])
     def wallet(self, request):
         pass
+
+    @app.route('/admin/add', methods=['POST'])
+    def add_admin(self, request):
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+                endorser = user.address
+
+                content = request.args
+                organization = content[b'organization'][0].decode('utf-8')
+                email = content[b'user-email'][0].decode('utf-8')
+                self.add_admin_by_email(organization, email)
+                request.redirect('/organization')
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
 
     @app.route('/logout', methods=['GET'])
     def logout(self, request):
