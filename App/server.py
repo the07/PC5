@@ -153,6 +153,17 @@ class Server(NodeMixin):
                 pass
         return
 
+    def get_balance(self, address):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.BALANCE_URL.format(node, self.FULL_NODE_PORT, address)
+            try:
+                response = requests.get(url)
+                balance = response.content.read()
+                return balance
+            except requests.exceptions.RequestException as re:
+                pass
+
 
     @app.route('/', methods=['GET'], branch=True)
     def index(self, request):
@@ -545,7 +556,24 @@ class Server(NodeMixin):
 
     @app.route('/wallet', methods=['GET'])
     def wallet(self, request):
-        pass
+
+        session_id = request.getSession().uid.decode('utf-8')
+        for instance in self.instances:
+            if instance.session_id == session_id:
+                user = instance.get_user_by_session(session_id)
+                endorser = user.address
+
+                html_file = html_file = open('Frontend/wallet.html').read()
+                soup = BeautifulSoup(html_file, 'html.parser')
+
+                balance_tag = soup.find(id="balance")
+                balance = self.get_balance(user.address)
+                balance_tag.string = balance
+
+                return str(soup)
+
+        response = "What you are looking for is on Mars, and you are on Venus"
+        return json.dumps(response)
 
     @app.route('/admin/add', methods=['POST'])
     def add_admin(self, request):
@@ -579,7 +607,10 @@ class Server(NodeMixin):
 
     @app.route('/purchase', methods=['POST'])
     def buy_coins(self, request):
-        pass
+
+        message = "Currently not working"
+        return json.dumps(message)
+
 
 if __name__ == '__main__':
 
