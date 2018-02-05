@@ -77,7 +77,7 @@ class Peoplechain(object):
             if user.email == email:
                 for organization in self.organizations:
                     if organization.index == int(index):
-                        organization.add_admin(user.address)
+                        organization.add_admin([user.address])
                         return
 
     def get_organization_by_admin(self, address):
