@@ -445,7 +445,8 @@ class Server(NodeMixin):
                 if index == 'None':
                     index = '1111111111111111'
                 if int(admin) == 0:
-                    organization = Organization(int(index)+1, name, website, location, otype)
+                    address = self.get_genesis_user_address()
+                    organization = Organization(int(index)+1, name, website, location, otype, [address])
                     self.broadcast_organization(organization)
                     request.redirect('/organization')
                 else:
