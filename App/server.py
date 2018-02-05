@@ -159,7 +159,7 @@ class Server(NodeMixin):
             url = self.BALANCE_URL.format(node, self.FULL_NODE_PORT, address)
             try:
                 response = requests.get(url)
-                balance = response.content.read()
+                balance = response.content.decode('utf-8')
                 return balance
             except requests.exceptions.RequestException as re:
                 pass
