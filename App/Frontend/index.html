@@ -26,9 +26,12 @@
     </div>
   </div>
   <div class="grid-x log-in-form-container align-center">
-    <form class="log-in-form large-4 medium-6 small-10" action="/login" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
-      <input type="text" placeholder="Email" name="email" />
-      <input type="password" placeholder="Password" name="password" />
+    <form class="log-in-form large-4 medium-6 small-10" action="/login" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" data-abide novalidate>
+      <div data-abide-error class="alert callout" style="display: none;">
+        <p><i class="fi-alert"></i> There are some errors in your form.</p>
+      </div>
+      <input type="email" placeholder="Email" name="email" required/>
+      <input type="password" placeholder="Password" name="password" required/>
       <p><input type="submit" class="button expanded" value="Log In"></input></p>
       <p class="text-center"><a href="user-register.html"><u>New User? Sign Up</u></a></p>
     </form>

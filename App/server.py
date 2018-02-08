@@ -65,6 +65,21 @@ class Server(NodeMixin):
             except requests.exceptions.RequestException as re:
                 pass
 
+    def get_user_by_index(self, index):
+        self.request_nodes_from_all()
+        for node in self.full_nodes:
+            url = self.USER_INDEX_URL.format(node, self.FULL_NODE_PORT, index)
+            try:
+                response = requests.get(url)
+                response_content = response.content.decode('utf-8')
+                if response_content is not '':
+                    user_json = json.loads(json.loads(response_content)['user'])
+                    return User.from_json(user_json)
+                else:
+                    return None
+            except requests.exceptions.RequestException as re:
+                pass
+
     def get_all_organization(self):
         self.request_nodes_from_all()
         for node in self.full_nodes:
@@ -259,6 +274,7 @@ class Server(NodeMixin):
         content = request.args
         email = content[b'email'][0].decode('utf-8')
         password = content[b'password'][0]
+        print (email, password)
         password_hash = sha256(password).hexdigest()
         user = self.get_user_by_email(email)
         if user is None or user.password != password_hash:
@@ -285,7 +301,7 @@ class Server(NodeMixin):
                 html_file = open('Frontend/dashboard.html').read()
                 soup = BeautifulSoup(html_file, 'html.parser')
 
-                source="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + user.address
+                source="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + "http://13.126.248.230:30906/view/" + user.index
                 new_img_tag = soup.new_tag('img')
                 new_img_tag['src'] = source
                 soup.find(id='qr-image').append(new_img_tag)
@@ -563,7 +579,7 @@ class Server(NodeMixin):
                 user = instance.get_user_by_session(session_id)
                 endorser = user.address
 
-                html_file = html_file = open('Frontend/wallet.html').read()
+                html_file = open('Frontend/wallet.html').read()
                 soup = BeautifulSoup(html_file, 'html.parser')
 
                 balance_tag = soup.find(id="balance")
@@ -591,6 +607,27 @@ class Server(NodeMixin):
 
         response = "What you are looking for is on Mars, and you are on Venus"
         return json.dumps(response)
+
+    @app.route('/view/<index>', methods=['GET'], branch=True)
+    def view_user(self, request, index):
+
+        user = self.get_user_by_index(index)
+
+        if user is not None:
+            html_file = open('Frontend/view.html').read()
+            soup = BeautifulSoup(html_file, 'html.parser')
+
+            soup.find(id='name').string = user.name
+            soup.find(id='email').string = user.email
+            soup.find(id='headline').string = user.headline
+            soup.find(id='summary').string = user.summary
+            soup.find(id='location').string = user.location
+
+            return str(soup)
+
+        else:
+            message = "User not Found"
+            return json.dumps(message)
 
     @app.route('/logout', methods=['GET'])
     def logout(self, request):

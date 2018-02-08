@@ -29,14 +29,17 @@
         <img src="images/connect_linkedin.png" height="40" width="201"/>
       </a>
     </div>
-    <form class="log-in-form large-4 medium-5 small-10" id="signup-form" action="/register" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
-      <input type="text" placeholder="Name" name="name" />
-      <input type="text" placeholder="Email" name="email" />
-      <input type="password" placeholder="Password" name="password" />
-      <input type="password" placeholder="Confirm Password" disabled />
-      <input type="text" placeholder="Headline" name="headline" />
-      <textarea name="summary" placeholder="Tell us about you" rows="5" form="signup-form"></textarea>
-      <input type="text" placeholder="Location" name="location" />
+    <form class="log-in-form large-4 medium-5 small-10" id="signup-form" action="/register" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" data-abide novalidate>
+      <div data-abide-error class="alert callout" style="display: none;">
+        <p><i class="fi-alert"></i> There are some errors in your form.</p>
+      </div>
+      <input type="text" placeholder="Name" name="name" required/>
+      <input type="text" placeholder="Email" name="email" required pattern="email"/>
+      <input type="password" id="password" placeholder="Password" name="password" required/>
+      <input type="password" placeholder="ReType Password" name="password" required data-equalto="password"/>
+      <input type="text" placeholder="Headline" name="headline" required/>
+      <textarea name="summary" placeholder="Tell us about you" rows="5" form="signup-form" required></textarea>
+      <input type="text" placeholder="Location" name="location" required />
       <p><input type="submit" class="button expanded" value="Submit"></input></p>
     </form>
     <div class="message large-10 medium-10 small-10 text-center" id="message">

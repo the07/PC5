@@ -25,9 +25,9 @@
   <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
   <!-- Compressed CSS -->
-  <link rel="stylesheet" href="css/foundation.min.css" />
-  <link rel="stylesheet" media="screen" href="css/style.css" />
-  <link rel="stylesheet" href="css/datalist.css" />
+  <link rel="stylesheet" href="../css/foundation.min.css" />
+  <link rel="stylesheet" media="../screen" href="css/style.css" />
+  <link rel="stylesheet" href="../css/datalist.css" />
 </head>
 <body>
 <!-- BODY -->
@@ -42,16 +42,6 @@
     <div class="top-bar-left">
       <ul class="dropdown menu" data-dropdown-menu>
         <li class="menu-text libre-font">PeopleChain</li>
-        <li class="has-submenu">
-          <a href="dashboard.html">Profile</a>
-          <ul class="submenu menu vertical" data-submenu>
-            <!-- <li><a href="#0">Settings</a></li> -->
-            <li><a href="organization.html">Organization</a></li>
-            <li><a href="/logout">Logout</a></li>
-          </ul>
-        </li>
-        <li><a href="requests.html">Requests</a></li>
-        <li><a href="wallet.html">Wallet</a></li>
       </ul>
     </div>
     <div class="top-bar-right">
@@ -66,7 +56,6 @@
       <div class="grid-x">
         <h3 class=" cell large-12 small-12 medium-12">User Information</h3>
         <div class="cell large-5 medium-5 small-12 qr-image">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=82374128374981273:489271394871298347" />
         </div>
         <div class="cell large-6 medium-6 small-12 large-offset-1 medium-offset-1">
           <p>
@@ -92,19 +81,8 @@
 <!-- scripts -->
 <!-- Compressed JavaScript -->
 <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="js/foundation.min.js"></script>
-<script src="js/datalist.min.js"></script>
-<script>
-(function() {
-    var inputs = document.getElementsByTagName('input');
-    for( var i = 0; i < inputs.length; i++ ) {
-        var input = inputs[i];
-        input.onchange = function(evt) {
-            var elem = evt ? evt.target : window.event.srcElement;
-        };
-    }
-}());
-</script>
-<script src="js/script.js"></script>
+<script src="../js/foundation.min.js"></script>
+<script src="../js/datalist.min.js"></script>
+<script src="../js/script.js"></script>
 </body>
 </html>

@@ -53,8 +53,11 @@
     </div>
     <div class="cell large-7 small-12 medium-7">
       <h4>Create new Organization</h4>
-      <form id="record-form" class="log-in-form large-5 medium-5 small-10" action="/organization" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
-        <select name="otype">
+      <form id="record-form" class="log-in-form large-5 medium-5 small-10" action="/organization" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" data-abide novalidate>
+        <div data-abide-error class="alert callout" style="display: none;">
+          <p><i class="fi-alert"></i> There are some errors in your form.</p>
+        </div>
+        <select name="otype" required>
           <option selected disabled>
             Organization Type
           </option>
@@ -68,22 +71,12 @@
             Other
           </option>
         </select>
-        <input type="text" placeholder="Name" list="organization-user" name="oname" />
+        <input type="text" placeholder="Name" list="organization-user" name="oname" required/>
         <datalist id="organization-user">
           <!--[if lte IE 9]><select data-datalist="organization-user"><![endif]-->
-          <!-- Populate this list dynamically -->
-          <optgroup label="Swedish Cars">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-          </optgroup>
-          <optgroup label="German Cars">
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-          </optgroup>
-          <!--[if lte IE 9]></select><![endif]-->
         </datalist>
-        <input type="url" placeholder="Website" name="website"/>
-        <input type="text" placeholder="Location" name="location"/>
+        <input type="url" placeholder="Website" name="website" required pattern="website"/>
+        <input type="text" placeholder="Location" name="location" required/>
         <p>
           Do you represent the owner of the organization? <input type="radio" name="admin" value="0" checked />No
            <input type="radio" name="admin" value="1" />Yes

@@ -82,8 +82,11 @@
             <button class="close-button" aria-label="Dismiss alert" type="button" data-close="exampleModal1">
               <span aria-hidden="true">&times;</span>
             </button>
-            <form id="record-form" class="log-in-form large-6 medium-6 small-10" action="/record" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
-              <select name="type">
+            <form id="record-form" class="log-in-form large-6 medium-6 small-10" action="/record" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" data-abide novalidate>
+              <div data-abide-error class="alert callout" style="display: none;">
+                <p><i class="fi-alert"></i> There are some errors in your form.</p>
+              </div>
+              <select name="type" required>
                 <option selected disabled>
                   Record Type
                 </option>
@@ -97,15 +100,15 @@
                   Project/Volunteer
                 </option>
               </select>
-              <input type="text" placeholder="Role/Course" name="role"/>
+              <input type="text" placeholder="Role/Course" name="role"/ required>
               <label>Organization not in list? <a href="/organization">Click here</a></label>
-              <input type="text" placeholder="Company/Institute Name" list="organization-user" name="organization-id" >
+              <input type="text" placeholder="Company/Institute Name" list="organization-user" name="organization-id" required pattern="number">
               <datalist id="organization-user">
                 <!--[if lte IE 9]><select data-datalist="organization-user"><![endif]-->
                 <!-- Populate this list dynamically -->
                 <!--[if lte IE 9]></select><![endif]-->
               </datalist>
-              <textarea name="detail" placeholder="Detail" rows="5" form="record-form" name='record-detail'></textarea>
+              <textarea name="detail" placeholder="Detail" rows="5" form="record-form" name='record-detail' required></textarea>
               <p><input type="submit" class="button expanded" value="Submit"></input></p>
             </form>
           </div>
