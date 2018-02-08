@@ -301,7 +301,7 @@ class Server(NodeMixin):
                 html_file = open('Frontend/dashboard.html').read()
                 soup = BeautifulSoup(html_file, 'html.parser')
 
-                source="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + "http://13.126.248.230:30906/view/" + user.index
+                source="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + "http://13.126.248.230:30906/view/" + str(user.index)
                 new_img_tag = soup.new_tag('img')
                 new_img_tag['src'] = source
                 soup.find(id='qr-image').append(new_img_tag)
