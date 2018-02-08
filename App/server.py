@@ -437,8 +437,9 @@ class Server(NodeMixin):
                         new_input_tag['name'] = "organization"
                         new_input_tag['value'] =  organization.index
                         new_form_tag.append(new_input_tag)
-                        new_input_tag = soup.new_tag("input", type="text", placeholder="User Email")
+                        new_input_tag = soup.new_tag("input", type="email", placeholder="User Email")
                         new_input_tag['name'] = "user-email"
+                        new_input_tag['required'] = None
                         new_form_tag.append(new_input_tag)
                         new_button = soup.new_tag('button')
                         new_button["class"] = "button"
